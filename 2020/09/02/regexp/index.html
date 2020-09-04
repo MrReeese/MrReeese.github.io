@@ -1,0 +1,288 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JavaScript正则表达式学习笔记 | Reese</title><meta name="description" content="否定字符集字符集放置在[]内部，要创建否定字符集，你需要在开始括号后面和不想匹配的字符前面放置插入字符（即^）。 例如，&#x2F;[^aeiou]&#x2F;gi匹配所有非元音字符。注意，字符.、!、[、@、&#x2F;和空白字符等也会被匹配 123let quoteSample &#x3D; &quot;3 blind mice.&quot;;let myRegex &#x3D; &#x2F;[^0-9|aeiou]&#x2F;gi; &#x2F;&#x2F; 匹配数字以及元音以外"><meta name="keywords" content="前端, JavaScript, 正则表达式"><meta name="author" content="John Reese"><meta name="copyright" content="John Reese"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://yoursite.com/2020/09/02/regexp/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="article"><meta property="og:title" content="JavaScript正则表达式学习笔记"><meta property="og:url" content="http://yoursite.com/2020/09/02/regexp/"><meta property="og:site_name" content="Reese"><meta property="og:description" content="否定字符集字符集放置在[]内部，要创建否定字符集，你需要在开始括号后面和不想匹配的字符前面放置插入字符（即^）。 例如，&#x2F;[^aeiou]&#x2F;gi匹配所有非元音字符。注意，字符.、!、[、@、&#x2F;和空白字符等也会被匹配 123let quoteSample &#x3D; &quot;3 blind mice.&quot;;let myRegex &#x3D; &#x2F;[^0-9|aeiou]&#x2F;gi; &#x2F;&#x2F; 匹配数字以及元音以外"><meta property="og:image" content="https://codesource.io/wp-content/uploads/2020/01/Regular-Expressions-RegExp-in-Javascript.png"><meta property="article:published_time" content="2020-09-02T05:09:09.634Z"><meta property="article:modified_time" content="2020-09-02T05:18:05.254Z"><meta name="twitter:card" content="summary"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  hexoversion: '5.1.1',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  bookmark: {
+    message_prev: '按',
+    message_next: '键将本页加入书签'
+  },
+  runtime: '',
+  date_suffix: {"one_hour":"刚刚","hours":"小时前","day":"天前"},
+  copyright: undefined,
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+      const now = new Date()
+      const expiryDay = ttl * 86400000
+      const item = {
+        value: value,
+        expiry: now.getTime() + expiryDay,
+      }
+      localStorage.setItem(key, JSON.stringify(item))
+    },
+  
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2020-09-02 13:18:05'
+}</script><noscript><style type="text/css">
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+  }
+}
+
+var autoChangeMode = 'false'
+var t = saveToLocal.get('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (saveToLocal.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><meta name="generator" content="Hexo 5.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">10</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">23</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">5</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div id="body-wrap"><div id="web_bg" data-type="color"></div><div id="sidebar"><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%A6%E5%AE%9A%E5%AD%97%E7%AC%A6%E9%9B%86"><span class="toc-number">1.</span> <span class="toc-text">否定字符集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8C%B9%E9%85%8D%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E6%88%96%E5%A4%9A%E6%AC%A1%E7%9A%84%E5%AD%97%E7%AC%A6"><span class="toc-number">2.</span> <span class="toc-text">匹配出现一次或多次的字符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8C%B9%E9%85%8D%E5%87%BA%E7%8E%B0%E9%9B%B6%E6%AC%A1%E6%88%96%E5%A4%9A%E6%AC%A1%E7%9A%84%E5%AD%97%E7%AC%A6"><span class="toc-number">3.</span> <span class="toc-text">匹配出现零次或多次的字符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E6%83%B0%E6%80%A7%E5%8C%B9%E9%85%8D%E6%9D%A5%E6%9F%A5%E6%89%BE%E5%AD%97%E7%AC%A6"><span class="toc-number">4.</span> <span class="toc-text">用惰性匹配来查找字符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8C%B9%E9%85%8D%E6%89%80%E6%9C%89%E7%9A%84%E5%AD%97%E6%AF%8D%E5%92%8C%E6%95%B0%E5%AD%97"><span class="toc-number">5.</span> <span class="toc-text">匹配所有的字母和数字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8C%B9%E9%85%8D%E9%99%A4%E4%BA%86%E5%AD%97%E6%AF%8D%E5%92%8C%E6%95%B0%E5%AD%97%E7%9A%84%E6%89%80%E6%9C%89%E7%AC%A6%E5%8F%B7"><span class="toc-number">6.</span> <span class="toc-text">匹配除了字母和数字的所有符号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8C%B9%E9%85%8D%E6%89%80%E6%9C%89%E9%9D%9E%E6%95%B0%E5%AD%97"><span class="toc-number">7.</span> <span class="toc-text">匹配所有非数字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B%EF%BC%9A%E9%99%90%E5%88%B6%E5%8F%AF%E8%83%BD%E7%9A%84%E7%94%A8%E6%88%B7%E5%90%8D"><span class="toc-number">8.</span> <span class="toc-text">案例：限制可能的用户名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8C%B9%E9%85%8D%E7%A9%BA%E7%99%BD%E5%AD%97%E7%AC%A6"><span class="toc-number">9.</span> <span class="toc-text">匹配空白字符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E5%AE%9A%E5%8C%B9%E9%85%8D%E7%9A%84%E4%B8%8A%E9%99%90%E5%92%8C%E4%B8%8B%E9%99%90"><span class="toc-number">10.</span> <span class="toc-text">指定匹配的上限和下限</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E5%AE%9A%E5%8C%B9%E9%85%8D%E7%9A%84%E7%A1%AE%E5%88%87%E6%95%B0%E9%87%8F"><span class="toc-number">11.</span> <span class="toc-text">指定匹配的确切数量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5%E5%85%A8%E9%83%A8%E6%88%96%E6%97%A0"><span class="toc-number">12.</span> <span class="toc-text">检查全部或无</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A3%E5%90%91%E5%85%88%E8%A1%8C%E6%96%AD%E8%A8%80%E5%92%8C%E8%B4%9F%E5%90%91%E5%85%88%E8%A1%8C%E6%96%AD%E8%A8%80"><span class="toc-number">13.</span> <span class="toc-text">正向先行断言和负向先行断言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%8D%95%E8%8E%B7%E7%BB%84%E9%87%8D%E7%94%A8%E6%A8%A1%E5%BC%8F%EF%BC%88%E9%87%8D%E8%A6%81%EF%BC%89"><span class="toc-number">14.</span> <span class="toc-text">使用捕获组重用模式（重要）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%8D%95%E8%8E%B7%E7%BB%84%E6%90%9C%E7%B4%A2%E5%92%8C%E6%9B%BF%E6%8D%A2"><span class="toc-number">15.</span> <span class="toc-text">使用捕获组搜索和替换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B%EF%BC%9A%E5%88%A0%E9%99%A4%E5%BC%80%E5%A4%B4%E5%92%8C%E7%BB%93%E5%B0%BE%E7%9A%84%E7%A9%BA%E7%99%BD"><span class="toc-number">16.</span> <span class="toc-text">案例：删除开头和结尾的空白</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B%EF%BC%9A%E9%AA%8C%E8%AF%81%E6%88%96%E8%80%85%E5%8C%B9%E9%85%8D%E6%96%87%E6%9C%AC%E4%B8%AD%E7%9A%84%E9%82%AE%E7%AE%B1"><span class="toc-number">17.</span> <span class="toc-text">案例：验证或者匹配文本中的邮箱</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B%EF%BC%9A%E7%9F%AD%E7%BA%BF%E8%BF%9E%E6%8E%A5%E6%A0%BC%E5%BC%8F%E8%BD%AC%E6%8D%A2"><span class="toc-number">18.</span> <span class="toc-text">案例：短线连接格式转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%84%BF%E7%AB%A5%E9%BB%91%E8%AF%9D"><span class="toc-number">19.</span> <span class="toc-text">儿童黑话</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%90%9C%E7%B4%A2%E5%92%8C%E6%9B%BF%E6%8D%A2"><span class="toc-number">20.</span> <span class="toc-text">搜索和替换</span></a></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://codesource.io/wp-content/uploads/2020/01/Regular-Expressions-RegExp-in-Javascript.png)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Reese</a></span><span id="menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><span class="close" id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">JavaScript正则表达式学习笔记</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-09-02T05:09:09.634Z" title="发表于 2020-09-02 13:09:09">2020-09-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2020-09-02T05:18:05.254Z" title="更新于 2020-09-02 13:18:05">2020-09-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/JavaScript/">JavaScript</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>13分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><h2 id="否定字符集"><a href="#否定字符集" class="headerlink" title="否定字符集"></a>否定字符集</h2><p>字符集放置在<code>[]</code>内部，要创建<code>否定字符集</code>，你需要在开始括号后面和不想匹配的字符前面放置<code>插入字符</code>（即<code>^</code>）。</p>
+<p>例如，<code>/[^aeiou]/gi</code>匹配所有非元音字符。注意，字符<code>.</code>、<code>!</code>、<code>[</code>、<code>@</code>、<code>/</code>和空白字符等也会被匹配</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> quoteSample = <span class="string">&quot;3 blind mice.&quot;</span>;</span><br><span class="line"><span class="keyword">let</span> myRegex = <span class="regexp">/[^0-9|aeiou]/gi</span>; <span class="comment">// 匹配数字以及元音以外的所有字符</span></span><br><span class="line"><span class="keyword">let</span> result = quoteSample.match(myRegex); </span><br></pre></td></tr></table></figure>
+
+<h2 id="匹配出现一次或多次的字符"><a href="#匹配出现一次或多次的字符" class="headerlink" title="匹配出现一次或多次的字符"></a>匹配出现一次或多次的字符</h2><p>匹配出现一次或者连续多次的的字符（或字符组）。它可能出现一次或者多次</p>
+<p>使用<code>+</code>符号来检查情况是否如此。记住，字符或匹配模式必须一个接一个地连续出现。</p>
+<p>例如，<code>/a+/g</code>会在<code>&quot;abc&quot;</code>中匹配到一个匹配项，并且返回<code>[&quot;a&quot;]</code>。因为<code>+</code>的存在，它也会在<code>&quot;aabc&quot;</code>中匹配到一个匹配项，然后返回<code>[&quot;aa&quot;]</code>。</p>
+<p>如果它是检查字符串<code>&quot;abab&quot;</code>，它将匹配到两个匹配项并且返回<code>[&quot;a&quot;, &quot;a&quot;]</code>，因为<code>a</code>字符不连续，在它们之间有一个<code>b</code>字符。最后，因为在字符串<code>&quot;bcd&quot;</code>中没有<code>&quot;a&quot;</code>，因此找不到匹配项。</p>
+<h2 id="匹配出现零次或多次的字符"><a href="#匹配出现零次或多次的字符" class="headerlink" title="匹配出现零次或多次的字符"></a>匹配出现零次或多次的字符</h2><p>创建一个变量为<code>chewieRegex</code>的正则表达式，使用<code>*</code>符号在<code>chewieQuote</code>中匹配<code>&quot;A&quot;</code>及其之后出现的零个或多个<code>&quot;a&quot;</code>。你的正则表达式不需要使用修饰符，也不需要匹配引号。</p>
+<ul>
+<li><p>你的正则表达式<code>chewieRegex</code>应该使用<code>*</code>符号匹配<code>&quot;A&quot;</code>之后出现的零个或多个<code>&quot;a&quot;</code>字符。</p>
+</li>
+<li><p>你的正则表达式<code>chewieRegex</code>应该匹配 16 个字符。</p>
+</li>
+<li><p>你的正则表达式应该匹配<code>&quot;Aaaaaaaaaaaaaaaa&quot;</code>。</p>
+</li>
+<li><p>你的正则表达式在<code>&quot;He made a fair move. Screaming about it can&#39;t help you.&quot;</code>中不应该匹配任何字符。</p>
+</li>
+<li><p>你的正则表达式在<code>&quot;Let him have it. It&#39;s not wise to upset a Wookiee.&quot;</code>中不应该匹配任何字符</p>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> chewieQuote = <span class="string">&quot;Aaaaaaaaaaaaaaaarrrgh!&quot;</span>;</span><br><span class="line"><span class="keyword">let</span> chewieRegex = <span class="regexp">/Aa*/g</span>; <span class="comment">// 修改这一行</span></span><br><span class="line"><span class="keyword">let</span> result = chewieQuote.match(chewieRegex);</span><br></pre></td></tr></table></figure>
+
+<h2 id="用惰性匹配来查找字符"><a href="#用惰性匹配来查找字符" class="headerlink" title="用惰性匹配来查找字符"></a>用惰性匹配来查找字符</h2><p>在正则表达式中，<code>贪婪</code>匹配会匹配到符合正则表达式匹配模式的字符串的最长可能部分，并将其作为匹配项返回。另一种方案称为<code>懒惰</code>匹配，它会匹配到满足正则表达式的字符串的最小可能部分。</p>
+<p>你可以将正则表达式<code>/t[a-z]*i/</code>应用于字符串<code>&quot;titanic&quot;</code>。这个正则表达式是一个以<code>t</code>开始，以<code>i</code>结束，并且中间有一些字母的匹配模式。</p>
+<p>正则表达式默认是<code>贪婪</code>匹配，因此匹配返回为<code>[&quot;titani&quot;]</code>。它会匹配到适合该匹配模式的最大子字符串。</p>
+<p>但是，你可以使用<code>?</code>字符来将其变成<code>懒惰</code>匹配。调整后的正则表达式<code>/t[a-z]*?i/</code>匹配字符串<code>&quot;titanic&quot;</code>返回<code>[&quot;ti&quot;]</code>。</p>
+<h2 id="匹配所有的字母和数字"><a href="#匹配所有的字母和数字" class="headerlink" title="匹配所有的字母和数字"></a>匹配所有的字母和数字</h2><p>使用字符类，你可以使用<code>[a-z]</code>搜寻字母表中的所有字母。这种字符类是很常见的，它有一个缩写，但这个缩写也包含额外的字符。</p>
+<p>JavaScript 中与字母表匹配的最接近的字符类是<code>\w</code>，这个缩写等同于<code>[A-Za-z0-9_]</code>。它不仅可以匹配大小写字母和数字，注意，它还会匹配下划线字符（<code>_</code>）。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 返回字符串内英文句子的单词数</span></span><br><span class="line"><span class="keyword">let</span> quoteSample = <span class="string">&quot;The five boxing wizards jump quickly .&quot;</span>;</span><br><span class="line"><span class="keyword">let</span> alphabetRegexV2 = <span class="regexp">/\w+/g</span>; <span class="comment">// 修改这一行</span></span><br><span class="line"><span class="keyword">let</span> result = quoteSample.match(alphabetRegexV2).length;</span><br><span class="line"><span class="built_in">console</span>.log(result);</span><br></pre></td></tr></table></figure>
+
+<h2 id="匹配除了字母和数字的所有符号"><a href="#匹配除了字母和数字的所有符号" class="headerlink" title="匹配除了字母和数字的所有符号"></a>匹配除了字母和数字的所有符号</h2><p>你已经了解到可以使用缩写<code>\w</code>来匹配字母和数字<code>[A-Za-z0-9_]</code>。不过，有可能你想要搜寻的匹配模式与字母数字相反。</p>
+<p>你可以使用<code>\W</code>搜寻和<code>\w</code>相反的匹配模式。注意，相反匹配模式使用大写字母。此缩写与<code>[^A-Za-z0-9_]</code>是一样的。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> quoteSample = <span class="string">&quot;The five boxing wizards jump quickly.&quot;</span>;</span><br><span class="line"><span class="keyword">let</span> nonAlphabetRegex = <span class="regexp">/\W/g</span>; <span class="comment">// 修改这一行</span></span><br><span class="line"><span class="keyword">let</span> result = quoteSample.match(nonAlphabetRegex).length; <span class="comment">// result = 6</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="匹配所有非数字"><a href="#匹配所有非数字" class="headerlink" title="匹配所有非数字"></a>匹配所有非数字</h2><p>查找非数字字符的缩写是<code>\D</code>。这等同于字符串<code>[^0-9]</code>，它查找不是 0 - 9 之间数字的单个字符。</p>
+<h2 id="案例：限制可能的用户名"><a href="#案例：限制可能的用户名" class="headerlink" title="案例：限制可能的用户名"></a>案例：限制可能的用户名</h2><p>你需要检查数据库中的所有用户名。以下是用户在创建用户名时必须遵守的一些简单规则。</p>
+<ol>
+<li><p>用户名中的数字必须在最后，且数字可以有零个或多个。</p>
+</li>
+<li><p>用户名字母可以是小写字母和大写字母。</p>
+</li>
+<li><p>用户名长度必须至少为两个字符。两位用户名只能使用字母。</p>
+</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> username = <span class="string">&quot;JackOfAllTrades&quot;</span>;</span><br><span class="line"><span class="keyword">let</span> userCheck = <span class="regexp">/[a-z][a-z]\d*/i</span>;</span><br><span class="line"><span class="keyword">let</span> result = userCheck.test(username);</span><br></pre></td></tr></table></figure>
+
+<h2 id="匹配空白字符"><a href="#匹配空白字符" class="headerlink" title="匹配空白字符"></a>匹配空白字符</h2><p>迄今为止的挑战包括匹配的字母和数字。你还可以匹配字母之间的空格。</p>
+<p>你可以使用<code>\s</code>搜寻空格，其中<code>s</code>是小写。此匹配模式不仅匹配空格，还匹配回车符、制表符、换页符和换行符，你可以将其视为与<code>[\r\t\f\n\v]</code>类似。</p>
+<h2 id="指定匹配的上限和下限"><a href="#指定匹配的上限和下限" class="headerlink" title="指定匹配的上限和下限"></a>指定匹配的上限和下限</h2><p>回想一下，你使用加号<code>+</code>查找一个或多个字符，使用星号<code>*</code>查找零个或多个字符。这些都很方便，但有时你需要匹配一定范围的匹配模式。</p>
+<p>你可以使用<code>数量说明符</code>指定匹配模式的上下限。数量说明符与花括号（<code>&#123;</code>和<code>&#125;</code>）一起使用。你可以在花括号之间放两个数字，这两个数字代表匹配模式的上限和下限。</p>
+<p>例如，要在字符串<code>&quot;ah&quot;</code>中匹配仅出现<code>3</code>到<code>5</code>次的字母<code>a</code>，你的正则表达式应为<code>/a&#123;3,5&#125;h/</code>。</p>
+<ul>
+<li>匹配在<code>&quot;Oh no&quot;</code>中仅出现<code>3</code>到<code>6</code>次的字母<code>h</code>。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> ohStr = <span class="string">&quot;Ohhh no&quot;</span>;</span><br><span class="line"><span class="keyword">let</span> ohRegex = <span class="regexp">/Oh&#123;3,6&#125; no/</span>;</span><br><span class="line"><span class="keyword">let</span> result = ohRegex.test(ohStr);</span><br></pre></td></tr></table></figure>
+
+<h2 id="指定匹配的确切数量"><a href="#指定匹配的确切数量" class="headerlink" title="指定匹配的确切数量"></a>指定匹配的确切数量</h2><p>你可以使用带有花括号的<code>数量说明符</code>来指定匹配模式的上下限。但有时你只需要特定数量的匹配。</p>
+<p>要指定一定数量的匹配模式，只需在大括号之间放置一个数字。</p>
+<p>例如，要只匹配字母<code>a</code>出现<code>3</code>次的单词<code>&quot;hah&quot;</code>，你的正则表达式应为<code>/ha&#123;3&#125;h/</code>。</p>
+<h2 id="检查全部或无"><a href="#检查全部或无" class="headerlink" title="检查全部或无"></a>检查全部或无</h2><p>有时，你想要搜寻的匹配模式可能有不确定是否存在的部分。尽管如此，你还是想检查它们。</p>
+<p>为此，你可以使用问号<code>?</code>指定可能存在的元素。这将检查前面的零个或一个元素。你可以将此符号视为前面的元素是可选的</p>
+<ul>
+<li>匹配美式英语（favorite）和英式英语（favourite）的单词版本。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> favWord = <span class="string">&quot;favorite&quot;</span>;</span><br><span class="line"><span class="keyword">let</span> favRegex = <span class="regexp">/favou?rite/</span>; <span class="comment">// 修改这一行</span></span><br><span class="line"><span class="keyword">let</span> result = favRegex.test(favWord);</span><br></pre></td></tr></table></figure>
+
+<h2 id="正向先行断言和负向先行断言"><a href="#正向先行断言和负向先行断言" class="headerlink" title="正向先行断言和负向先行断言"></a>正向先行断言和负向先行断言</h2><p><strong>先行断言</strong>是告诉 JavaScript 在字符串中向前查找的匹配模式。当你想要在同一个字符串上搜寻多个匹配模式时，这非常有用。</p>
+<p>有两种先行断言方式：<code>正向先行断言</code>和<code>负向先行断言</code></p>
+<p><strong>正向先行断言</strong>会查看并确保搜索匹配模式中的元素存在，但实际上并不匹配。正向先行断言的用法是<code>(?=...)</code>，其中<code>...</code>就是需要存在但不会被匹配的部分，每个<code>(?=...)</code>都是一个对整个测试对象的测试规则，</p>
+<p>另一方面，<strong>负向先行断言</strong>会查看并确保搜索匹配模式中的元素不存在。负向先行断言的用法是<code>(?!...)</code>，其中<code>...</code>是你希望不存在的匹配模式。如果负向先行断言部分不存在，将返回匹配模式的其余部分。</p>
+<ul>
+<li><p><strong>先行断言</strong>的更实际用途是检查一个字符串中的两个或更多匹配模式。这里有一个简单的密码检查器，密码规则是 3 到 6 个字符且至少包含一个数字：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> password = <span class="string">&quot;abc123&quot;</span>;</span><br><span class="line"><span class="keyword">let</span> checkPass = <span class="regexp">/(?=\w&#123;3,6&#125;)(?=\D*\d)/</span>;</span><br><span class="line">checkPass.test(password); <span class="comment">// Returns true</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用<strong>先行断言</strong>以匹配至少5个字符且有两个连续数字的密码。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> sampleWord = <span class="string">&quot;astronaut&quot;</span>;</span><br><span class="line"><span class="comment">// \D* 匹配前面多个非数字字符，这2个(?=) 为串行匹配，意思为，先通过第一个(?=)，然后再通过第二个(?=)，每个</span></span><br><span class="line"><span class="keyword">let</span> pwRegex = <span class="regexp">/(?=\w&#123;5,&#125;)(?=\D*\d&#123;2,&#125;)/</span>; </span><br><span class="line"><span class="keyword">let</span> result = pwRegex.test(sampleWord);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="使用捕获组重用模式（重要）"><a href="#使用捕获组重用模式（重要）" class="headerlink" title="使用捕获组重用模式（重要）"></a>使用捕获组重用模式（重要）</h2><p>如果要搜寻的匹配模式会在字符串中出现多次，那么手动重复该正则表达式不是一个高效的方法。此时就需要用到<strong>捕获组</strong></p>
+<p>你可以使用<strong>捕获组</strong>搜寻重复的子字符串。括号<code>(</code>和<code>)</code>可以用来匹配重复的子字符串。你只需要把重复匹配模式的正则表达式放在括号中即可。</p>
+<p>要指定重复字符串将出现的位置，可以使用反斜杠（<code>\</code>）后接一个数字。这个数字从 1 开始，随着你使用的每个捕获组的增加而增加。这里有一个示例，<code>\1</code>可以匹配第一个组。</p>
+<p>下面的示例匹配任意两个被空格分割的单词：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> repeatStr = <span class="string">&quot;regex regex&quot;</span>;</span><br><span class="line"><span class="keyword">let</span> repeatRegex = <span class="regexp">/(\w+)\s\1/</span>; <span class="comment">// </span></span><br><span class="line">repeatRegex.test(repeatStr); <span class="comment">// Returns true</span></span><br><span class="line">repeatStr.match(repeatRegex); <span class="comment">// Returns [&quot;regex regex&quot;, &quot;regex&quot;]</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>此处的\1 为占位符，复用一号位<code>(\w+)</code>匹配到的值作为规则在当前位置进行检测</li>
+<li><code>(\w+)</code> 捕获到第一个单词<code>regex</code> ，那么后面的\1就以这个<code>regex</code>作为当前\1所在位置的规则进行匹配</li>
+</ul>
+<p>在字符串上使用<code>.match()</code>方法将返回一个数组，其中包含它匹配的字符串及其捕获组。</p>
+<ul>
+<li><p>在正则表达式<code>reRegex</code>中使用<code>捕获组</code>，以匹配在字符串中仅重复三次的数字，每一个都由空格分隔。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> repeatNum = <span class="string">&quot;42 42 42&quot;</span>;</span><br><span class="line"><span class="keyword">let</span> reRegex =  <span class="regexp">/^(\d+)\s\1\s\1$/</span>; <span class="comment">//使用开头^和结尾$来包裹表达式模板进行严格匹配,\1处复用第一个匹配到的值作为规则</span></span><br><span class="line"><span class="keyword">let</span> result = reRegex.test(repeatNum);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="使用捕获组搜索和替换"><a href="#使用捕获组搜索和替换" class="headerlink" title="使用捕获组搜索和替换"></a>使用捕获组搜索和替换</h2><p>搜索功能是很有用的。但是，当你的搜索也执行更改（或替换）匹配文本的操作时，搜索功能就会显得更加强大。</p>
+<p>可以使用字符串上<code>.replace()</code>方法来搜索并替换字符串中的文本。<code>.replace()</code>的输入首先是你想要搜索的正则表达式匹配模式，第二个参数是用于替换匹配的字符串或用于执行某些操作的函数。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> wrongText = <span class="string">&quot;The sky is silver.&quot;</span>;</span><br><span class="line"><span class="keyword">let</span> silverRegex = <span class="regexp">/silver/</span>;</span><br><span class="line">wrongText.replace(silverRegex, <span class="string">&quot;blue&quot;</span>);</span><br><span class="line"><span class="comment">// Returns &quot;The sky is blue.&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>你还可以使用美元符号（<code>$</code>）访问替换字符串中的捕获组。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;Code Camp&quot;</span>.replace(<span class="regexp">/(\w+)\s(\w+)/</span>, <span class="string">&#x27;$2 $1&#x27;</span>);</span><br><span class="line"><span class="comment">// Returns &quot;Camp Code&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="案例：删除开头和结尾的空白"><a href="#案例：删除开头和结尾的空白" class="headerlink" title="案例：删除开头和结尾的空白"></a>案例：删除开头和结尾的空白</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> hello = <span class="string">&quot;   Hello, World!  &quot;</span>;</span><br><span class="line"><span class="keyword">let</span> wsRegex = <span class="regexp">/^\s+|\s+$/g</span>; <span class="comment">// 匹配多个空格开头和结尾的多个空格</span></span><br><span class="line"><span class="keyword">let</span> result = hello.replace(wsRegex,<span class="string">&#x27;&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="案例：验证或者匹配文本中的邮箱"><a href="#案例：验证或者匹配文本中的邮箱" class="headerlink" title="案例：验证或者匹配文本中的邮箱"></a>案例：验证或者匹配文本中的邮箱</h2><ul>
+<li><p>匹配出邮箱</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> email = <span class="string">&quot;my email is  ljp123456@sina.com&quot;</span>;</span><br><span class="line"><span class="keyword">let</span> emailRegex = <span class="regexp">/\w&#123;5,16&#125;@\D&#123;2,&#125;.[com|net|org|cn]$/</span>; <span class="comment">// 修改这一行</span></span><br><span class="line"><span class="keyword">let</span> result = email.match(emailRegex)</span><br><span class="line"><span class="built_in">console</span>.log(result);</span><br><span class="line">[</span><br><span class="line">  <span class="string">&#x27;ljp123456@sina.com&#x27;</span>,</span><br><span class="line">  index: <span class="number">13</span>,</span><br><span class="line">  input: <span class="string">&#x27;my email is  ljp123456@sina.com&#x27;</span>,</span><br><span class="line">  groups: <span class="literal">undefined</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p>验证邮箱格式</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> email = <span class="string">&quot;ljp123456@sina.com&quot;</span>;</span><br><span class="line"><span class="keyword">let</span> emailRegex = <span class="regexp">/^\w&#123;5,16&#125;@\D&#123;2,&#125;.[com|net|org|cn]$/</span>; <span class="comment">// 修改这一行</span></span><br><span class="line"><span class="keyword">let</span> result = emailRegex.test(email)</span><br><span class="line"><span class="built_in">console</span>.log(result);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="案例：短线连接格式转换"><a href="#案例：短线连接格式转换" class="headerlink" title="案例：短线连接格式转换"></a>案例：短线连接格式转换</h2><p>在这道题目中，我们需要写一个函数，把一个字符串转换为“短线连接格式”。短线连接格式的意思是，所有字母都是小写，且用<code>-</code>连接。比如，对于<code>Hello World</code>，应该转换为<code>hello-world</code>；对于<code>I love_Javascript-VeryMuch</code>，应该转换为<code>i-love-javascript-very-much</code>。</p>
+<ul>
+<li><p><code>spinalCase(&quot;This Is Spinal Tap&quot;)</code>应该返回<code>&quot;this-is-spinal-tap&quot;</code>。</p>
+</li>
+<li><p><code>spinalCase(&quot;thisIsSpinalTap&quot;)</code>应该返回<code>&quot;this-is-spinal-tap&quot;</code>。</p>
+</li>
+<li><p><code>spinalCase(&quot;The_Andy_Griffith_Show&quot;)</code>应该返回<code>&quot;the-andy-griffith-show&quot;</code>。</p>
+</li>
+<li><p><code>spinalCase(&quot;Teletubbies say Eh-oh&quot;)</code>应该返回<code>&quot;teletubbies-say-eh-oh&quot;</code>。</p>
+</li>
+<li><p><code>spinalCase(&quot;AllThe-small Things&quot;)</code>应该返回<code>&quot;all-the-small-things&quot;</code></p>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">spinalCase</span>(<span class="params">str</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> temp = str.replace(<span class="regexp">/^\s+|\s+$/</span>,<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">  temp = (temp.charAt(<span class="number">0</span>).toUpperCase() + temp.substring(<span class="number">1</span>)) <span class="comment">//将字符串头部</span></span><br><span class="line">    .replace(<span class="regexp">/[\-]/g</span>,<span class="string">&#x27; &#x27;</span>) </span><br><span class="line">    .match(<span class="regexp">/\w+/g</span>)</span><br><span class="line">    .map(<span class="function"><span class="params">item</span> =&gt;</span> item.charAt(<span class="number">0</span>).toUpperCase() + item.substring(<span class="number">1</span>))</span><br><span class="line">    .join(<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">    .match(<span class="regexp">/[A-Z][a-z]+/g</span>)</span><br><span class="line">    .join(<span class="string">&#x27;-&#x27;</span>)</span><br><span class="line">    .toLowerCase()</span><br><span class="line">  <span class="keyword">return</span> temp</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">spinalCase(<span class="string">&#x27;This Is Spinal Tap&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="儿童黑话"><a href="#儿童黑话" class="headerlink" title="儿童黑话"></a>儿童黑话</h2><p>我们需要写一个函数，把传入的字符串翻译成“儿童黑话”。</p>
+<p><a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Pig_Latin">儿童黑话</a>的基本转换规则很简单，只需要把一个英文单词的第一个辅音字母或第一组辅音从移到单词的结尾，并在后面加上<code>ay</code>即可。在英语中，字母 a、e、i、o、u 为元音，其余的字母均为辅音。辅音从的意思是连续的多个辅音字母。</p>
+<p>额外地，如果单词本身是以元音开头的，那只需要在结尾加上<code>way</code>。</p>
+<p>在本题中，传入的单词一定会是英文单词，且所有字母均为小写。</p>
+<ul>
+<li><p><code>translatePigLatin(&quot;california&quot;)</code>应该返回 “aliforniacay”。</p>
+</li>
+<li><p><code>translatePigLatin(&quot;paragraphs&quot;)</code>应该返回 “aragraphspay”。</p>
+</li>
+<li><p><code>translatePigLatin(&quot;glove&quot;)</code>应该返回 “oveglay”。</p>
+</li>
+<li><p><code>translatePigLatin(&quot;algorithm&quot;)</code>应该返回 “algorithmway”。</p>
+</li>
+<li><p><code>translatePigLatin(&quot;eight&quot;)</code>应该返回 “eightway”。</p>
+</li>
+<li><p>你的代码应当能够处理第一个元音字母在单词结尾的情况。比如<code>translatePigLatin(&quot;she&quot;)</code>应该返回 “eshay”。</p>
+</li>
+<li><p>你的代码应当能够处理单词中不含元音字母的情况。比如<code>translatePigLatin(&quot;rhythm&quot;)</code>应该返回 “rhythmay”。</p>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">translatePigLatin</span>(<span class="params">str</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> a = str.match(<span class="regexp">/[aeiou]\w*/</span>) <span class="comment">// 匹配元音开头且后续字母出现0次或多次的片段</span></span><br><span class="line">  <span class="keyword">let</span> b = str.match(<span class="regexp">/^[^aeiou]+/</span>) <span class="comment">// 匹配以元音字母开头且后续至少一次的片段</span></span><br><span class="line">  <span class="comment">// 如果是以字符串</span></span><br><span class="line">  <span class="keyword">return</span> <span class="regexp">/^[aeiou]+/</span>.test(str) ? str + <span class="string">&#x27;way&#x27;</span> : (a ? a : <span class="string">&#x27;&#x27;</span>) + (b ? (b + <span class="string">&#x27;ay&#x27;</span>) : <span class="string">&#x27;way&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">translatePigLatin(<span class="string">&quot;consonant&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="搜索和替换"><a href="#搜索和替换" class="headerlink" title="搜索和替换"></a>搜索和替换</h2><p>我们需要写一个字符串的搜索与替换函数，它的返回值为完成替换后的新字符串。</p>
+<p>这个函数接收的第一个参数为待替换的句子。第二个参数为句中需要被替换的单词。第三个参数为替换后的单词。</p>
+<p><strong>注意：</strong><br>需要保留被替换单词首字母的大小写格式。即如果传入的第二个参数为 “Book”，第三个参数为 “dog”，那么替换后的结果应为 “Dog”</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">myReplace</span> (<span class="params">str, before, after</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> regExp = <span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="string">`<span class="subst">$&#123;before&#125;</span>`</span>, <span class="string">&#x27;gi&#x27;</span>)</span><br><span class="line">  <span class="keyword">return</span> <span class="regexp">/[A-Z]/</span>.test(str.match(regExp)[<span class="number">0</span>].charAt(<span class="number">0</span>)) ?</span><br><span class="line">    str.replace(regExp, after.charAt(<span class="number">0</span>).toUpperCase() + after.slice(<span class="number">1</span>))</span><br><span class="line">    :</span><br><span class="line">    str.replace(regExp, after)</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(myReplace(<span class="string">&#x27;He is Sleeping on the couch&#x27;</span>, <span class="string">&#x27;Sleeping&#x27;</span>, <span class="string">&#x27;sitting&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">John Reese</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://yoursite.com/2020/09/02/regexp/">http://yoursite.com/2020/09/02/regexp/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://yoursite.com" target="_blank">Reese</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/JavaScript/">JavaScript</a><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/">正则表达式</a></div><div class="post_share"><div class="social-share" data-image="https://codesource.io/wp-content/uploads/2020/01/Regular-Expressions-RegExp-in-Javascript.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2020/09/02/javascript_algorithms/"><img class="prev-cover" src="https://pic4.zhimg.com/v2-6d4a0ccd09e126a8af0035327a9a235c_1440w.jpg?source=172ae18b" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">JavaScript数据结构与算法</div></div></a></div><div class="next-post pull-right"><a href="/2020/09/02/docker/"><img class="next-cover" src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3134195079,2533312711&amp;fm=26&amp;gp=0.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Docker容器的基本使用</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2020/09/02/ES6-8/" title="ECMAScript6-8 常见新特性"><img class="cover" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1599027370473&di=53fbc9985e53b37800c335ade6d46689&imgtype=0&src=http%3A%2F%2Fwww.cuelogic.com%2Fwp-content%2Fuploads%2F2016%2F04%2FECMAScript-6.jpeg"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-09-02</div><div class="title">ECMAScript6-8 常见新特性</div></div></a></div><div><a href="/2020/09/02/javascript_algorithms/" title="JavaScript数据结构与算法"><img class="cover" src="https://pic4.zhimg.com/v2-6d4a0ccd09e126a8af0035327a9a235c_1440w.jpg?source=172ae18b"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-09-02</div><div class="title">JavaScript数据结构与算法</div></div></a></div><div><a href="/2020/09/02/cube/" title="使用CSS+JS实现一个简单的立方体(可旋转)"><img class="cover" src="https://raw.githubusercontent.com/MrReeese/proxy/master/img/image-20200902163752855.png"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-09-02</div><div class="title">使用CSS+JS实现一个简单的立方体(可旋转)</div></div></a></div><div><a href="/2020/08/20/drag-resize/" title="Javascript 实现div的拖拽与变形"><img class="cover" src="https://raw.githubusercontent.com/MrReeese/proxy/master/img/drag-resize.png"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-08-20</div><div class="title">Javascript 实现div的拖拽与变形</div></div></a></div><div><a href="/2020/09/03/webpack/" title="webpack 4 打包入门"><img class="cover" src="https://pic3.zhimg.com/v2-fd4298513141b363287e8358a93804fb_1440w.jpg?source=172ae18b"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-09-03</div><div class="title">webpack 4 打包入门</div></div></a></div><div><a href="/2020/08/23/Promise/" title="实现ES6的新特性——Promise"><img class="cover" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1598980976412&di=67e9158ce3a92f30edc899040cf2dafb&imgtype=0&src=http%3A%2F%2Fpic.baike.soso.com%2Fp%2F20140710%2F20140710213836-955952945.jpg"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-08-23</div><div class="title">实现ES6的新特性——Promise</div></div></a></div></div></div></article></main><footer id="footer" style="background-image: url(https://codesource.io/wp-content/uploads/2020/01/Regular-Expressions-RegExp-in-Javascript.png)" data-type="photo"><div id="footer-wrap"><div class="copyright">&copy;2020 By John Reese</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="/js/search/local-search.js"></script><script>var endLoading = function () {
+  document.body.style.overflow = 'auto';
+  document.getElementById('loading-box').classList.add("loaded")
+}
+window.addEventListener('load',endLoading)</script><div class="js-pjax"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script defer="defer" id="ribbon_piao" mobile="false" src="/js/third-party/piao.js"></script></div></body></html>
